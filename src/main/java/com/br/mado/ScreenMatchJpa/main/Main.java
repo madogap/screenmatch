@@ -2,12 +2,15 @@ package com.br.mado.ScreenMatchJpa.main;
 
 import com.br.mado.ScreenMatchJpa.model.DadosSerie;
 import com.br.mado.ScreenMatchJpa.model.DadosTemporada;
+import com.br.mado.ScreenMatchJpa.model.Serie;
 import com.br.mado.ScreenMatchJpa.service.ConsumoApi;
 import com.br.mado.ScreenMatchJpa.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private Scanner leitura = new Scanner(System.in);
@@ -77,7 +80,14 @@ public class Main {
         }
         temporadas.forEach(System.out::println);
     }
+
     private void ListarSerieBuscadas(){
-        dadosSeries.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series= dadosSeries.stream()
+                .map(d -> new Serie(d))
+                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 }
