@@ -93,10 +93,11 @@ public class Main {
     }
 
     private void ListarSerieBuscadas(){
-        List<Serie> series = new ArrayList<>();
-        series= dadosSeries.stream()
-                .map(d -> new Serie(d))
-                .collect(Collectors.toList());
+       // List<Serie> series = new ArrayList<>();
+        //series= dadosSeries.stream()
+               // .map(d -> new Serie(d))
+              //  .collect(Collectors.toList());
+        List<Serie> series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
