@@ -36,7 +36,8 @@ public class Main {
             var menu = """
                 1 - Buscar séries
                 2 - Buscar episódios
-                3-  Listar séries buscadas
+                3 - Listar séries buscadas
+                4 - Buscar séries por Título
                 0 - Sair                                 
                 """;
 
@@ -54,6 +55,9 @@ public class Main {
                 case 3:
                     ListarSerieBuscadas();
                     break;
+                case 4 :
+                    buscarSeriePorTitulo();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -62,6 +66,7 @@ public class Main {
             }
         }
     }
+
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
@@ -79,7 +84,6 @@ public class Main {
         return dados;
     }
 
-
     //Fazer busca das series do banco de dados
     private void buscarEpisodioPorSerie(){
         //DadosSerie dadosSerie = getDadosSerie();
@@ -88,9 +92,9 @@ public class Main {
         System.out.println("Escolha a série pelo nome:");
         var nomeDaSerie = leitura.nextLine();
 
-        Optional<Serie> serie = series.stream()
-                .filter(s -> s.getTitulo().toLowerCase().contains(nomeDaSerie.toLowerCase()))
-                .findFirst();
+        //Buscar do banco
+        Optional<Serie> serie = repositorio.findByTituloContainingIgnoreCase(nomeDaSerie);
+
         if (serie.isPresent()) {
             var serieEncontrada = serie.get();
 
@@ -124,5 +128,19 @@ public class Main {
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
     }
+
+    private void buscarSeriePorTitulo() {
+        System.out.println("Escolha a série pelo titulo:");
+        var nomeDaSerie = leitura.nextLine();
+        Optional<Serie> serieBuscadaPorTitulo = repositorio.findByTituloContainingIgnoreCase(nomeDaSerie);
+
+        if (serieBuscadaPorTitulo.isPresent()){
+            System.out.println("Dados da série " + serieBuscadaPorTitulo);
+        } else {
+            System.out.println("Série não encontrada");
+        }
+    }
+
+
 
 }
