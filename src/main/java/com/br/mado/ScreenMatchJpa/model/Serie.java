@@ -24,7 +24,7 @@ public class Serie {
     private String sinopse;
 
     //Uma Serie tem muitos episodios
-    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
@@ -40,12 +40,13 @@ public class Serie {
         //this.sinopse = ConsltaGhatGPT.obterTraducao(dadosSerie.sinopse()).trim();
     }
 
-
     public List<Episodio> getEpisodios() {
         return episodios;
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+       //Salvando chave estrangeira na tabela
+        episodios.forEach(episodio -> episodio.setSerie(this));
         this.episodios = episodios;
     }
 
@@ -122,7 +123,8 @@ public class Serie {
 
                 ", atores='" + atores + '\'' +
                 ", poster='" + poster + '\'' +
-                ", sinopse='" + sinopse + '\''
+                ", sinopse='" + sinopse + '\''+
+                ", episodios='" + episodios + '\''
                 ;
     }
 }
