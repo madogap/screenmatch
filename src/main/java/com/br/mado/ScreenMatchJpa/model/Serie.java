@@ -23,7 +23,8 @@ public class Serie {
     private String poster;
     private String sinopse;
 
-    @Transient
+    //Uma Serie tem muitos episodios
+    @OneToMany(mappedBy = "serie")
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
@@ -38,6 +39,7 @@ public class Serie {
         this.sinopse = dadosSerie.sinopse();
         //this.sinopse = ConsltaGhatGPT.obterTraducao(dadosSerie.sinopse()).trim();
     }
+
 
     public List<Episodio> getEpisodios() {
         return episodios;
