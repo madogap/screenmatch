@@ -3,8 +3,10 @@ package com.br.mado.ScreenMatchJpa.main;
 import com.br.mado.ScreenMatchJpa.model.DadosSerie;
 import com.br.mado.ScreenMatchJpa.model.DadosTemporada;
 import com.br.mado.ScreenMatchJpa.model.Serie;
+import com.br.mado.ScreenMatchJpa.repository.SerieRepository;
 import com.br.mado.ScreenMatchJpa.service.ConsumoApi;
 import com.br.mado.ScreenMatchJpa.service.ConverteDados;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,6 +22,13 @@ public class Main {
     private final String API_KEY = "&apikey=b13e9aeb";
 
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+
+    private SerieRepository repositorio;
+
+    public Main(SerieRepository repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public void exibeMenu() {
         var opcao = -1;
@@ -57,7 +66,9 @@ public class Main {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        //dadosSeries.add(dados);
+        repositorio.save(serie);
         System.out.println(dados);
     }
 

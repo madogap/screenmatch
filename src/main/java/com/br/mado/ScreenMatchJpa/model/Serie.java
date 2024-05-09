@@ -1,9 +1,9 @@
 package com.br.mado.ScreenMatchJpa.model;
 
-import com.br.mado.ScreenMatchJpa.service.ConsultaGhatGPT;
-
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
@@ -23,6 +23,9 @@ public class Serie {
     private String poster;
     private String sinopse;
 
+    @Transient
+    private List<Episodio> episodios = new ArrayList<>();
+
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
@@ -30,7 +33,16 @@ public class Serie {
         this.genero = Categoria.fromString(dadosSerie.genero().split("," )[0].trim());
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = ConsultaGhatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+        this.sinopse = dadosSerie.sinopse();
+        //this.sinopse = ConsltaGhatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
     }
 
     public Long getId() {
