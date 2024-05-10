@@ -1,9 +1,6 @@
 package com.br.mado.ScreenMatchJpa.main;
 
-import com.br.mado.ScreenMatchJpa.model.DadosSerie;
-import com.br.mado.ScreenMatchJpa.model.DadosTemporada;
-import com.br.mado.ScreenMatchJpa.model.Episodio;
-import com.br.mado.ScreenMatchJpa.model.Serie;
+import com.br.mado.ScreenMatchJpa.model.*;
 import com.br.mado.ScreenMatchJpa.repository.SerieRepository;
 import com.br.mado.ScreenMatchJpa.service.ConsumoApi;
 import com.br.mado.ScreenMatchJpa.service.ConverteDados;
@@ -40,6 +37,8 @@ public class Main {
                 4 - Buscar série por Título
                 5 - Buscar séries por Ator
                 6 - Buscar as 5 melhores séries
+                7 - Buscar séries por categoria
+                8 - Filtrar séries
                 0 - Sair                                 
                 """;
 
@@ -66,6 +65,14 @@ public class Main {
                 case 6:
                     buscarTop5Series();
                     break;
+                case 7:
+                    buscarSeriesPorCategoria();
+                    break;
+                    case 8:
+                        filtrarSeriesPorTemporadaEAvaliacao();
+                        break;
+
+
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -167,6 +174,25 @@ public class Main {
         //System.out.println(serieTop);
     }
 
+    private void buscarSeriesPorCategoria(){
+        System.out.println("Deseja buscar séries de que categoria/gênero? ");
+        var nomeGenero = leitura.nextLine();
+        Categoria categoria = Categoria.fromPortugues(nomeGenero);
+        List<Serie> seriesPorCategoria = repositorio.findByGenero(categoria);
+        System.out.println("Série de categoria " + nomeGenero);
+        seriesPorCategoria.forEach(System.out::println);
+    }
 
+    private void filtrarSeriesPorTemporadaEAvaliacao(){
+        System.out.println("Filtrar séries até quantas temporadas? ");
+        var totalTemporadas = leitura.nextInt();
+        System.out.println("Com avaliação a partir de que valor? ");
+        var avaliacao = leitura.nextDouble();
+        leitura.nextLine();
+        List<Serie> filtroSeries = repositorio.findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(totalTemporadas, avaliacao);
+        System.out.println("*** Série filtradas ***");
+        filtroSeries.forEach(serie -> System.out.println(serie.getTitulo()+" - avaliação: " + serie.getAvaliacao()));
+
+    }
 
 }

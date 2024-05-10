@@ -1,25 +1,36 @@
 package com.br.mado.ScreenMatchJpa.model;
 
 public enum Categoria {
-    ACAO("Action"),
-    ROMANCE("Romance"),
-    COMEDIA("Comedy"),
-    DRAMA("Drama"),
-    CRIME("Crime");
+    ACAO("Action", "Ação"),
+    ROMANCE("Romance", "Romance"),
+    COMEDIA("Comedy", "Comédia"),
+    DRAMA("Drama", "Drama"),
+    CRIME("Crime", "Crime");
 
-    private String categiriaOmdb;
+    private String categoriaOmdb;
+    private String categoriaPortugues;
 
-    Categoria(String categiriaOmdb){
-        this.categiriaOmdb = categiriaOmdb;
+    Categoria(String categiriaOmdb, String categoriaPortugues){
+        this.categoriaOmdb = categiriaOmdb;
+        this.categoriaPortugues = categoriaPortugues;
     }
 
     public static Categoria fromString(String text){
         for (Categoria categoria : Categoria.values()){
-            if (categoria.categiriaOmdb.equalsIgnoreCase(text)){
+            if (categoria.categoriaOmdb.equalsIgnoreCase(text)){
                 return categoria;
             }
         }
-        throw new IllegalArgumentException("Nenhuma categoria encontrada");
+        throw new IllegalArgumentException("Nenhuma categoria encontrada para string fornecida " + text);
+    }
+
+    public static Categoria fromPortugues(String text){
+        for (Categoria categoria : Categoria.values()){
+            if (categoria.categoriaPortugues.equalsIgnoreCase(text)){
+                return categoria;
+            }
+        }
+        throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida " + text);
     }
 
 }
