@@ -73,7 +73,7 @@ public class Main {
                     filtrarSeriesPorTemporadaEAvaliacao();
                     break;
                 case 9:
-                    buscarEpisodioPorTreco();
+                    buscarEpisodioPorTrecho();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -197,7 +197,7 @@ public class Main {
 
     }
 
-    private void buscarEpisodioPorTreco() {
+    private void buscarEpisodioPorTrecho() {
         System.out.println("Qual o nome do episodio para busca? ");
         var trechoEpisodio = leitura.nextLine();
         List<Episodio> episodiosEncontrados = repositorio.episodioPorTrecho(trechoEpisodio);
