@@ -28,19 +28,20 @@ public class Main {
 
     public void exibeMenu() {
         var opcao = -1;
-        while (opcao!=0){
+        while (opcao != 0) {
 
             var menu = """
-                1 - Buscar séries
-                2 - Buscar episódios
-                3 - Listar séries buscadas
-                4 - Buscar série por Título
-                5 - Buscar séries por Ator
-                6 - Buscar as 5 melhores séries
-                7 - Buscar séries por categoria
-                8 - Filtrar séries
-                0 - Sair                                 
-                """;
+                    1 - Buscar séries
+                    2 - Buscar episódios
+                    3 - Listar séries buscadas
+                    4 - Buscar série por Título
+                    5 - Buscar séries por Ator
+                    6 - Buscar as 5 melhores séries
+                    7 - Buscar séries por categoria
+                    8 - Filtrar séries
+                    9 - Buscar episódio por trecho
+                    0 - Sair                                 
+                    """;
 
             System.out.println(menu);
             opcao = leitura.nextInt();
@@ -56,7 +57,7 @@ public class Main {
                 case 3:
                     ListarSerieBuscadas();
                     break;
-                case 4 :
+                case 4:
                     buscarSeriePorTitulo();
                     break;
                 case 5:
@@ -68,11 +69,12 @@ public class Main {
                 case 7:
                     buscarSeriesPorCategoria();
                     break;
-                    case 8:
-                        filtrarSeriesPorTemporadaEAvaliacao();
-                        break;
-
-
+                case 8:
+                    filtrarSeriesPorTemporadaEAvaliacao();
+                    break;
+                case 9:
+                    buscarEpisodioPorTreco();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -100,7 +102,7 @@ public class Main {
     }
 
     //Fazer busca das series do banco de dados
-    private void buscarEpisodioPorSerie(){
+    private void buscarEpisodioPorSerie() {
         //DadosSerie dadosSerie = getDadosSerie();
 
         ListarSerieBuscadas();
@@ -119,7 +121,7 @@ public class Main {
                 DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
                 temporadas.add(dadosTemporada);
             }
-            
+
             temporadas.forEach(System.out::println);
 
             List<Episodio> episodios = temporadas.stream()
@@ -133,11 +135,11 @@ public class Main {
         }
     }
 
-    private void ListarSerieBuscadas(){
-       // List<Serie> series = new ArrayList<>();
+    private void ListarSerieBuscadas() {
+        // List<Serie> series = new ArrayList<>();
         //series= dadosSeries.stream()
-               // .map(d -> new Serie(d))
-              //  .collect(Collectors.toList());
+        // .map(d -> new Serie(d))
+        //  .collect(Collectors.toList());
         series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
@@ -149,7 +151,7 @@ public class Main {
         var nomeDaSerie = leitura.nextLine();
         Optional<Serie> serieBuscadaPorTitulo = repositorio.findByTituloContainingIgnoreCase(nomeDaSerie);
 
-        if (serieBuscadaPorTitulo.isPresent()){
+        if (serieBuscadaPorTitulo.isPresent()) {
             System.out.println("Dados da série " + serieBuscadaPorTitulo);
         } else {
             System.out.println("Série não encontrada");
@@ -174,7 +176,7 @@ public class Main {
         //System.out.println(serieTop);
     }
 
-    private void buscarSeriesPorCategoria(){
+    private void buscarSeriesPorCategoria() {
         System.out.println("Deseja buscar séries de que categoria/gênero? ");
         var nomeGenero = leitura.nextLine();
         Categoria categoria = Categoria.fromPortugues(nomeGenero);
@@ -183,7 +185,7 @@ public class Main {
         seriesPorCategoria.forEach(System.out::println);
     }
 
-    private void filtrarSeriesPorTemporadaEAvaliacao(){
+    private void filtrarSeriesPorTemporadaEAvaliacao() {
         System.out.println("Filtrar séries até quantas temporadas? ");
         var totalTemporadas = leitura.nextInt();
         System.out.println("Com avaliação a partir de que valor? ");
@@ -191,8 +193,17 @@ public class Main {
         leitura.nextLine();
         List<Serie> filtroSeries = repositorio.seriePorTemporadaEAvaliaaco(totalTemporadas, avaliacao);
         System.out.println("*** Série filtradas ***");
-        filtroSeries.forEach(serie -> System.out.println(serie.getTitulo()+" - avaliação: " + serie.getAvaliacao()));
+        filtroSeries.forEach(serie -> System.out.println(serie.getTitulo() + " - avaliação: " + serie.getAvaliacao()));
 
+    }
+
+    private void buscarEpisodioPorTreco() {
+        System.out.println("Qual o nome do episodio para busca? ");
+        var trechoEpisodio = leitura.nextLine();
+        List<Episodio> episodiosEncontrados = repositorio.episodioPorTrecho(trechoEpisodio);
+        episodiosEncontrados.forEach(e -> System.out.printf("Série: %s temporada %s - Episódio %s - %s\n ",
+                e.getSerie().getTitulo(), e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo()
+                ));
     }
 
 }

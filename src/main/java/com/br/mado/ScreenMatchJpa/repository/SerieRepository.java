@@ -1,10 +1,12 @@
 package com.br.mado.ScreenMatchJpa.repository;
 
 import com.br.mado.ScreenMatchJpa.model.Categoria;
+import com.br.mado.ScreenMatchJpa.model.Episodio;
 import com.br.mado.ScreenMatchJpa.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.security.spec.ECPoint;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +20,14 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
 
     List<Serie> findByGenero(Categoria categoria);
 
-    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(int totalTemporadas, double avaliacao);
+    //List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(int totalTemporadas, double avaliacao);
 
-
+    //JPGL
     @Query("select s from Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
     List<Serie> seriePorTemporadaEAvaliaaco(int totalTemporadas, double avaliacao);
+
+    //iLIKE  IGNORECASE, %O CONTAINS %:
+    @Query("SELECT e from Serie s JOIN s.episodios e WHERE e.titulo ILIKE %:trechoEpisodio%")
+    List<Episodio> episodioPorTrecho(String trechoEpisodio);
 
 }
