@@ -6,7 +6,6 @@ import com.br.mado.ScreenMatchJpa.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.security.spec.ECPoint;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +26,12 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     List<Serie> seriePorTemporadaEAvaliaaco(int totalTemporadas, double avaliacao);
 
     //iLIKE  IGNORECASE, %O CONTAINS %:
-    @Query("SELECT e from Serie s JOIN s.episodios e WHERE e.titulo ILIKE %:trechoEpisodio%")
+    @Query("SELECT e from Serie s JOIN s.episodios e WHERE e.titulo ILIKE %:trechoEpisodio% ")
     List<Episodio> episodioPorTrecho(String trechoEpisodio);
 
+    @Query("SELECT e from Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.avaliacao DESC LIMIT 5 ")
+    List<Episodio> topEpisodiosPorSerie(Serie serie);
+
+    @Query("SELECT e from Serie s JOIN s.episodios e WHERE s = :serie AND YEAR(e.dataLancamento) >= :anoLancamento")
+    List<Episodio> episodiosPorSerieEAno(Serie serie, int anoLancamento);
 }
