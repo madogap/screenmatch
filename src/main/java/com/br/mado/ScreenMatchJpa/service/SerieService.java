@@ -29,4 +29,8 @@ public class SerieService {
         return converteDados(repositorio.findTop5ByOrderByAvaliacaoDesc());
     }
 
+    public List<SerieDTO> obterLancamentos(){
+        return converteDados(repositorio.findTop5ByOrderByEpisodiosDataLancamentoDesc());
+    }
+
 }
