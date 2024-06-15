@@ -4,7 +4,6 @@ import com.br.mado.ScreenMatchJpa.model.*;
 import com.br.mado.ScreenMatchJpa.repository.SerieRepository;
 import com.br.mado.ScreenMatchJpa.service.ConsumoApi;
 import com.br.mado.ScreenMatchJpa.service.ConverteDados;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
