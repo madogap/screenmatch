@@ -2,6 +2,7 @@ package com.br.mado.ScreenMatchJpa.service;
 
 import com.br.mado.ScreenMatchJpa.dto.EpisodioDTO;
 import com.br.mado.ScreenMatchJpa.dto.SerieDTO;
+import com.br.mado.ScreenMatchJpa.model.Categoria;
 import com.br.mado.ScreenMatchJpa.model.Serie;
 import com.br.mado.ScreenMatchJpa.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,11 @@ public class SerieService {
                 .stream()
                 .map(e -> new EpisodioDTO(e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo()))
                 .collect(Collectors.toList());
+    }
+
+    public List<SerieDTO> obterSeriesPorCategoria(String nomeGenero) {
+        //Converter o que vem do navegador para o model
+        Categoria categoria = Categoria.fromPortugues(nomeGenero);
+        return converteDados(repositorio.findByGenero(categoria));
     }
 }
