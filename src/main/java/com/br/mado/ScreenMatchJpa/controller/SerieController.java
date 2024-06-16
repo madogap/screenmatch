@@ -1,5 +1,6 @@
 package com.br.mado.ScreenMatchJpa.controller;
 
+import com.br.mado.ScreenMatchJpa.dto.EpisodioDTO;
 import com.br.mado.ScreenMatchJpa.dto.SerieDTO;
 import com.br.mado.ScreenMatchJpa.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,11 @@ public class SerieController {
     public SerieDTO obterPorId(@PathVariable Long id){
         return servico.obterPorId(id);
     }
+
+    @GetMapping("/{id}/temporadas/todas")
+        public List<EpisodioDTO> obterTodasTemporadas(@PathVariable Long id){
+            return servico.obterTodasTemporadas(id);
+    }
+
 }
 

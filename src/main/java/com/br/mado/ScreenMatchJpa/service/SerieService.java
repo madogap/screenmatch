@@ -1,5 +1,6 @@
 package com.br.mado.ScreenMatchJpa.service;
 
+import com.br.mado.ScreenMatchJpa.dto.EpisodioDTO;
 import com.br.mado.ScreenMatchJpa.dto.SerieDTO;
 import com.br.mado.ScreenMatchJpa.model.Serie;
 import com.br.mado.ScreenMatchJpa.repository.SerieRepository;
@@ -33,15 +34,27 @@ public class SerieService {
     public SerieDTO obterPorId(Long id) {
         Optional<Serie> serie = repositorio.findById(id);
 
-            if (serie.isPresent()){
-                Serie s = serie.get();
-                return new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getAvaliacao(), s.getGenero(), s.getAtores(), s.getPoster(), s.getSinopse());
-            }
-            return null;
+        if (serie.isPresent()){
+            Serie s = serie.get();
+            return new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getAvaliacao(), s.getGenero(), s.getAtores(), s.getPoster(), s.getSinopse());
+        }
+        return null;
     }
 
     public List<SerieDTO> obterLancamentos(){
         return converteDados(repositorio.lancamentoMaisRecente());
     }
 
+    public List<EpisodioDTO> obterTodasTemporadas(Long id) {
+        Optional<Serie> serie = repositorio.findById(id);
+
+        if (serie.isPresent()){
+            Serie s = serie.get();
+            return s.getEpisodios().stream()
+                    .map(e -> new EpisodioDTO(e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo()))
+                    .collect(Collectors.toList());
+        }
+
+        return null;
+    }
 }
